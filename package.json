@@ -1,0 +1,22 @@
+{
+  "name": "hypnosisapp5-viet-hoa",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "vite build",
+    "preview": "vite preview --host 127.0.0.1"
+  },
+  "dependencies": {
+    "@vitejs/plugin-react": "^5.0.0",
+    "vite": "^7.0.0",
+    "typescript": "^5.8.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "lucide-react": "^0.562.0",
+    "lodash": "^4.17.21",
+    "zod": "^4.0.0"
+  },
+  "devDependencies": {}
+}
