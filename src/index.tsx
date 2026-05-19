@@ -17,7 +17,14 @@ function unmount() {
     root?.unmount();
     root = undefined;
 }
-$(() => {
+function onReady(callback) {
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', callback, { once: true });
+        return;
+    }
+    callback();
+}
+onReady(() => {
     void (async () => {
         try {
             await waitForMvuReady({ timeoutMs: 5000, pollMs: 150 });
@@ -27,6 +34,6 @@ $(() => {
         }
         void MvuBridge.resetThisTurnAppOperationLog();
         mount();
-        $(window).on('pagehide', unmount);
+        window.addEventListener('pagehide', unmount);
     })();
 });
