@@ -5,11 +5,17 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import { MvuBridge, waitForMvuReady } from './services/mvuBridge';
 let root;
-function mount() {
-    const rootElement = document.getElementById('app');
+function ensureRootElement() {
+    let rootElement = document.getElementById('app');
     if (!rootElement) {
-        throw new Error('Could not find #app element to mount to');
+        rootElement = document.createElement('div');
+        rootElement.id = 'app';
+        document.body.appendChild(rootElement);
     }
+    return rootElement;
+}
+function mount() {
+    const rootElement = ensureRootElement();
     root = ReactDOM.createRoot(rootElement);
     root.render(_jsx(React.StrictMode, { children: _jsx(App, {}) }));
 }

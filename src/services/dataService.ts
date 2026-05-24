@@ -456,6 +456,9 @@ function toFiniteNumber(value) {
     const n = typeof value === 'number' ? value : Number(value);
     return Number.isFinite(n) ? n : null;
 }
+function displayText(value) {
+    return String(value ?? '').replace(/_/g, ' ');
+}
 function normalizeSystemAliases(systemRaw) {
     const existingEnergy = toFiniteNumber(systemRaw._năng_lượng_MC);
     if (existingEnergy === null) {
@@ -655,20 +658,21 @@ async function buildRoleBasedAchievements(store) {
         if (!roleDataRaw || typeof roleDataRaw !== 'object')
             continue;
         const roleData = roleDataRaw;
+        const roleLabel = displayText(roleName);
         const guard = toFiniteNumber(roleData['độ_cảnh_giác']) ?? 0;
         const obey = toFiniteNumber(roleData['độ_phục_tùng']) ?? 0;
         for (const t of percentThresholds) {
             achievements.push({
                 id: makeAchievementId('ach_role_guard', roleName, String(t)),
-                title: `${roleName} độ cảnh giác đạt ${t}`,
-                description: `độ cảnh giác của ${roleName} đạt ${t}`,
+                title: `${roleLabel} độ cảnh giác đạt ${t}`,
+                description: `độ cảnh giác của ${roleLabel} đạt ${t}`,
                 rewardMcPoints: t,
                 checkCondition: () => guard >= t,
             });
             achievements.push({
                 id: makeAchievementId('ach_role_obey', roleName, String(t)),
-                title: `${roleName} độ phục tùng đạt ${t}`,
-                description: `độ phục tùng của ${roleName} đạt ${t}`,
+                title: `${roleLabel} độ phục tùng đạt ${t}`,
+                description: `độ phục tùng của ${roleLabel} đạt ${t}`,
                 rewardMcPoints: t,
                 checkCondition: () => obey >= t,
             });
@@ -681,8 +685,8 @@ async function buildRoleBasedAchievements(store) {
             for (const t of sensitivityThresholds) {
                 achievements.push({
                     id: makeAchievementId('ach_sensitivity', roleName, key, String(t)),
-                    title: `${roleName}·${key} ≥ ${t}`,
-                    description: `${key.replaceAll('_', ' ')} của ${roleName} đạt ${t}`,
+                    title: `${roleLabel}·${displayText(key)} ≥ ${t}`,
+                    description: `${displayText(key)} của ${roleLabel} đạt ${t}`,
                     rewardMcPoints: 20,
                     checkCondition: () => value >= t,
                 });
@@ -696,8 +700,8 @@ async function buildRoleBasedAchievements(store) {
             for (const t of orgasmThresholds) {
                 achievements.push({
                     id: makeAchievementId('ach_orgasm', roleName, key, String(t)),
-                    title: `${roleName}·${key} ≥ ${t}`,
-                    description: `${key.replaceAll('_', ' ')} của ${roleName} đạt ${t}`,
+                    title: `${roleLabel}·${displayText(key)} ≥ ${t}`,
+                    description: `${displayText(key)} của ${roleLabel} đạt ${t}`,
                     rewardMcPoints: 20,
                     checkCondition: () => value >= t,
                 });
@@ -721,7 +725,7 @@ function validateQuestDb(db) {
 }
 const QUEST_DATABASE = validateQuestDb(QUEST_DB);
 const PERSISTENT_FEATURE_IDS = new Set([]);
-const SUBSCRIPTION_TIER_TRIAL_LABEL = 'thời gian dùng thử';
+const SUBSCRIPTION_TIER_TRIAL_LABEL = 'thời_gian_dùng_thử';
 function getSubscriptionTierLabel(subscription, nowVirtualMinutes) {
     if (!subscription)
         return SUBSCRIPTION_TIER_TRIAL_LABEL;
